@@ -1,0 +1,43 @@
+<div class="chat-container">
+
+  <textarea
+    [(ngModel)]="question"
+    placeholder="Ask question about policy">
+  </textarea>
+
+  <button (click)="ask()">
+    Ask
+  </button>
+
+  <div *ngIf="loading" class="loading">
+    Thinking...
+  </div>
+
+  <div *ngIf="response">
+
+    <h3>Answer</h3>
+
+    <p>
+      {{ response?.answer }}
+    </p>
+
+    <h3>Citations</h3>
+
+    <div
+      *ngFor="let citation of response?.citations">
+
+      <strong>
+        Page {{ citation.pageNumber }}
+      </strong>
+
+      <p>
+        {{ citation.content }}
+      </p>
+
+      <hr />
+
+    </div>
+
+  </div>
+
+</div>

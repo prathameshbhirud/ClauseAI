@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+
+  postgres:
+    image: pgvector/pgvector:pg17
+    container_name: clauseai-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: clauseai
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+
+  ollama:
+    image: ollama/ollama
+    container_name: clauseai-ollama
+    restart: always
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+
+volumes:
+  ollama:

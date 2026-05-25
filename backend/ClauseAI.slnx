@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ClauseAI.Api/ClauseAI.Api.csproj" />
+  <Project Path="ClauseAI.Application/ClauseAI.Application.csproj" />
+  <Project Path="ClauseAI.Domain/ClauseAI.Domain.csproj" />
+  <Project Path="ClauseAI.Infrastructure/ClauseAI.Infrastructure.csproj" />
+</Solution>

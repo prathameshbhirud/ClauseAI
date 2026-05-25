@@ -1,0 +1,27 @@
+<div class="container">
+
+  <h1>ClauseAI</h1>
+
+  <app-upload
+    (uploaded)="onUploaded($event)">
+  </app-upload>
+
+  <div *ngIf="processing">
+    <h3>
+      Processing document...
+    </h3>
+  </div>
+  
+  <div *ngIf="uploadedDocument && !processing">
+
+    <h3>
+      {{ uploadedDocument.fileName }}
+    </h3>
+
+    <app-chat
+      [documentId]="uploadedDocument.id">
+    </app-chat>
+
+  </div>
+
+</div>

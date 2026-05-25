@@ -1,0 +1,16 @@
+<div class="upload-container">
+
+  <input
+    type="file"
+    accept=".pdf"
+    (change)="onFileSelected($event)" />
+
+  <button
+    (click)="upload()"
+    [disabled]="uploading">
+
+    {{ uploading ? 'Processing...' : 'Upload PDF' }}
+
+  </button>
+
+</div>

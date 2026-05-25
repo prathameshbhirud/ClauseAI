@@ -1,0 +1,49 @@
+# Visual Studio
+.vs/
+bin/
+obj/
+
+# Rider
+.idea/
+
+# Node
+node_modules/
+
+# Angular
+.angular/
+dist/
+
+# Logs
+logs/
+*.log
+
+# Environment
+.env
+
+# Storage
+storage/uploads/
+
+# Docker
+docker-data/
+
+# OCR
+*.png
+*.jpg
+*.jpeg
+
+# OS
+.DS_Store
+Thumbs.db
+
+# User files
+*.user
+*.suo
+
+# Secrets
+appsettings.Development.json
+
+# Tesseract data
+tessdata/
+
+# PostgreSQL
+*.db
