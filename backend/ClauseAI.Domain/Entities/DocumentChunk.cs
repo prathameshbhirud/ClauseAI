@@ -16,4 +16,6 @@ public class DocumentChunk
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
 
     public Vector? Embedding { get; set; }
+
+    public string SearchVector { get; set; } = string.Empty;
 }

@@ -20,6 +20,7 @@ public class DocumentsController : ControllerBase
     private readonly IVectorSearchService _vectorSearchService;
     private readonly IRagService _ragService;
     private readonly IDocumentIngestionService _ingestionService;
+    private readonly IChatCompletionService _chatCompletionService;
 
     public DocumentsController(
         ClauseAIDbContext dbContext,
@@ -29,7 +30,8 @@ public class DocumentsController : ControllerBase
         IEmbeddingService embeddingService,
         IVectorSearchService vectorSearchService,
         IRagService ragService,
-        IDocumentIngestionService ingestionService)
+        IDocumentIngestionService ingestionService,
+        IChatCompletionService chatCompletionService)
     {
         _dbContext = dbContext;
         _environment = environment;
@@ -39,6 +41,7 @@ public class DocumentsController : ControllerBase
         _vectorSearchService = vectorSearchService;
         _ragService = ragService;
         _ingestionService = ingestionService;
+        _chatCompletionService = chatCompletionService;
     }
 
     [HttpPost("upload")]
@@ -237,5 +240,33 @@ public class DocumentsController : ControllerBase
             id = document.Id,
             status = document.Status.ToString()
         });
+    }
+
+    [HttpPost("{documentId:guid}/ask-stream")]
+    public async Task AskStream(
+        Guid documentId,
+        [FromBody] AskQuestionRequest request)
+    {
+        Response.ContentType = "text/plain";
+
+        var chunks =
+            await _vectorSearchService.SearchAsync(
+                documentId,
+                request.Question,
+                request.TopK);
+
+        var context = string.Join(
+            "\n\n",
+            chunks.Select(x =>
+                $"[Page {x.PageNumber}]\n{x.Content}"));
+
+        await foreach (var token in _chatCompletionService.StreamAsync(
+                request.Question,
+                context))
+        {
+            await Response.WriteAsync(token);
+
+            await Response.Body.FlushAsync();
+        }
     }
 }

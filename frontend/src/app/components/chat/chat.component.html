@@ -1,42 +1,46 @@
 <div class="chat-container">
 
-  <textarea
-    [(ngModel)]="question"
-    placeholder="Ask question about policy">
-  </textarea>
-
-  <button (click)="ask()">
-    Ask
-  </button>
-
-  <div *ngIf="loading" class="loading">
-    Thinking...
-  </div>
-
-  <div *ngIf="response">
-
-    <h3>Answer</h3>
-
-    <p>
-      {{ response?.answer }}
-    </p>
-
-    <h3>Citations</h3>
+  <div class="messages" #messagesContainer>
 
     <div
-      *ngFor="let citation of response?.citations">
+      *ngFor="let message of messages"
+      class="message"
+      [ngClass]="message.role">
 
-      <strong>
-        Page {{ citation.pageNumber }}
-      </strong>
+      <div class="bubble">
 
-      <p>
-        {{ citation.content }}
-      </p>
+        {{ message.content }}
 
-      <hr />
+      </div>
 
     </div>
+
+    <div *ngIf="loading" class="message assistant">
+
+      <div class="bubble typing">
+
+        Thinking...
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="input-area">
+
+    <textarea
+      [(ngModel)]="question"
+      placeholder="Ask about your insurance policy">
+    </textarea>
+
+    <button
+      (click)="ask()"
+      [disabled]="loading">
+
+      Ask
+
+    </button>
 
   </div>
 

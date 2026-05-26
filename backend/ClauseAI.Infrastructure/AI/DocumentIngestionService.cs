@@ -71,6 +71,7 @@ public class DocumentIngestionService : IDocumentIngestionService
                         PageNumber = chunk.PageNumber,
                         ChunkIndex = chunk.ChunkIndex,
                         Content = chunk.Content,
+                        SearchVector = chunk.Content.ToLower(),
                         Embedding = new Vector(embedding)
                     });
                 }
@@ -84,7 +85,7 @@ public class DocumentIngestionService : IDocumentIngestionService
 
             await _dbContext.SaveChangesAsync();
         }
-        catch
+        catch   
         {
             document.Status = DocumentStatus.Failed;
 

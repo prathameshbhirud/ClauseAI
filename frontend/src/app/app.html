@@ -1,27 +1,41 @@
-<div class="container">
+<div class="layout">
 
-  <h1>ClauseAI</h1>
+  <aside class="sidebar">
 
-  <app-upload
-    (uploaded)="onUploaded($event)">
-  </app-upload>
+    <h2>ClauseAI</h2>
 
-  <div *ngIf="processing">
-    <h3>
+    <app-upload
+      (uploaded)="onUploaded($event)">
+    </app-upload>
+
+    <div
+      *ngIf="uploadedDocument"
+      class="document-card">
+
+      <h4>Current Document</h4>
+
+      <p>
+        {{ uploadedDocument.fileName }}
+      </p>
+
+    </div>
+
+  </aside>
+
+  <main class="chat-area">
+
+    <div *ngIf="processing"
+      class="processing">
+
       Processing document...
-    </h3>
-  </div>
-  
-  <div *ngIf="uploadedDocument && !processing">
 
-    <h3>
-      {{ uploadedDocument.fileName }}
-    </h3>
+    </div>
 
     <app-chat
+      *ngIf="uploadedDocument && !processing"
       [documentId]="uploadedDocument.id">
     </app-chat>
 
-  </div>
+  </main>
 
 </div>

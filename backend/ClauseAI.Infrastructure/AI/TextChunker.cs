@@ -8,7 +8,7 @@ public class TextChunker : ITextChunker
     public List<TextChunk> Chunk(
         string text,
         int pageNumber,
-        int chunkSize = 1000,
+        int chunkSize = 300,    // reduced to 300 to be able to run locally
         int overlap = 200)
     {
         var chunks = new List<TextChunk>();
