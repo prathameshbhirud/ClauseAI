@@ -35,7 +35,7 @@ export class ChatComponent {
     private cdr: ChangeDetectorRef
 ) {}
 
-  async ask() {
+  ask() {
 
     if (!this.question || !this.documentId) {
       return;
@@ -59,21 +59,44 @@ export class ChatComponent {
 
     this.loading = true;
 
-    await this.apiService.askQuestionStream(
+    this.apiService.askQuestion(
       this.documentId,
-      userQuestion,
-      (chunk) => {
+      userQuestion)
+      .subscribe({
 
-        this.scrollToBottom();
+        next: (result) => {
 
-        assistantMessage.content += chunk;
+          console.log(result);
 
-        this.cdr.detectChanges();
+          assistantMessage.content =
+            result.answer;
+
+          assistantMessage.citations =
+            result.citations;
+
+          this.messages = [...this.messages];
+
+          console.log(this.messages);
+
+          this.loading = false;
+
+          this.scrollToBottom();
+
+          this.cdr.detectChanges();
+        },
+
+        error: (error) => {
+
+          console.error(error);
+
+          assistantMessage.content =
+            'Error generating answer.';
+
+          this.loading = false;
+
+          this.cdr.detectChanges();
+        }
       });
-
-    this.loading = false;
-
-    this.cdr.detectChanges();
   }
 
   scrollToBottom() {

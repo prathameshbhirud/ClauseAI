@@ -9,7 +9,29 @@
 
       <div class="bubble">
 
-        {{ message.content }}
+        <div>
+          {{ message.content }}
+        </div>
+
+        <div
+          *ngIf="message.citations?.length"
+          class="citations">
+
+          <h4>Citations</h4>
+
+          <div
+            *ngFor="let citation of message.citations"
+            class="citation">
+
+            Page {{ citation.pageNumber }}
+
+            <br/>
+
+            {{ citation.content }}
+
+          </div>
+
+        </div>
 
       </div>
 
