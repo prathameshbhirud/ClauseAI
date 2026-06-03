@@ -1,6 +1,8 @@
 <div class="chat-container">
 
-  <div class="messages" #messagesContainer>
+  <div
+    class="messages"
+    #messagesContainer>
 
     <div
       *ngFor="let message of messages"
@@ -17,17 +19,25 @@
           *ngIf="message.citations?.length"
           class="citations">
 
-          <h4>Citations</h4>
+          <div class="citation-title">
+            Sources
+          </div>
 
           <div
             *ngFor="let citation of message.citations"
             class="citation">
 
-            Page {{ citation.pageNumber }}
+            <div class="citation-page">
 
-            <br/>
+              Page {{ citation.pageNumber }}
 
-            {{ citation.content }}
+            </div>
+
+            <div class="citation-content">
+
+              {{ citation.content }}
+
+            </div>
 
           </div>
 
@@ -37,7 +47,9 @@
 
     </div>
 
-    <div *ngIf="loading" class="message assistant">
+    <div
+      *ngIf="loading"
+      class="message assistant">
 
       <div class="bubble typing">
 
@@ -53,14 +65,13 @@
 
     <textarea
       [(ngModel)]="question"
-      placeholder="Ask about your insurance policy">
+      placeholder="Ask about your insurance policy...">
     </textarea>
 
     <button
-      (click)="ask()"
-      [disabled]="loading">
+      (click)="ask()">
 
-      Ask
+      ➜
 
     </button>
 

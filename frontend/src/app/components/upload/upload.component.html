@@ -2,14 +2,12 @@
 
   <input
     type="file"
-    accept=".pdf"
     (change)="onFileSelected($event)" />
 
   <button
-    (click)="upload()"
-    [disabled]="uploading">
+    (click)="upload()">
 
-    {{ uploading ? 'Processing...' : 'Upload PDF' }}
+    Upload PDF
 
   </button>
 

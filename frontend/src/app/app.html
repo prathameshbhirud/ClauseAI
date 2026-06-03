@@ -1,40 +1,104 @@
-<div class="layout">
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
 
   <aside class="sidebar">
 
-    <h2>ClauseAI</h2>
+    <div class="brand">
 
-    <app-upload
-      (uploaded)="onUploaded($event)">
-    </app-upload>
+      <div class="brand-icon">
+        💬
+      </div>
+
+      <div class="brand-name">
+        ClauseAI
+      </div>
+
+    </div>
+
+    <div class="sidebar-section">
+
+      <div class="section-label">
+        DOCUMENT
+      </div>
+
+      <app-upload
+        (uploaded)="onUploaded($event)">
+      </app-upload>
+
+    </div>
 
     <div
       *ngIf="uploadedDocument"
       class="document-card">
 
-      <h4>Current Document</h4>
+      <div class="pdf-icon">
+        📄
+      </div>
 
-      <p>
-        {{ uploadedDocument.fileName }}
-      </p>
+      <div class="document-details">
+
+        <div class="document-title">
+          {{ uploadedDocument.fileName }}
+        </div>
+
+        <div class="document-status">
+          ● Ready
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="menu">
+
+      <div class="menu-item active">
+        💬 Chat
+      </div>
+
+      <div class="menu-item">
+        📄 Document Preview
+      </div>
+
+      <div class="menu-item">
+        ⚖ Key Clauses
+      </div>
 
     </div>
 
   </aside>
 
-  <main class="chat-area">
+  <!-- MAIN -->
 
-    <div *ngIf="processing"
-      class="processing">
+  <main class="main-panel">
 
-      Processing document...
+    <header class="topbar">
+
+      <div class="topbar-title">
+
+        {{ uploadedDocument?.fileName
+          || 'Upload Insurance Policy' }}
+
+      </div>
+
+    </header>
+
+    <div class="chat-page">
+
+      <app-chat
+        *ngIf="uploadedDocument && !processing"
+        [documentId]="uploadedDocument.id">
+      </app-chat>
+
+      <div
+        *ngIf="processing"
+        class="processing-state">
+
+        Processing document...
+
+      </div>
 
     </div>
-
-    <app-chat
-      *ngIf="uploadedDocument && !processing"
-      [documentId]="uploadedDocument.id">
-    </app-chat>
 
   </main>
 

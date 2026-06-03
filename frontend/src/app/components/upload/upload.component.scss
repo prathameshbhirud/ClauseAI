@@ -1,0 +1,39 @@
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+input[type="file"] {
+  background: rgba(255,255,255,0.08);
+
+  border: 1px solid rgba(255,255,255,0.1);
+
+  color: white;
+
+  padding: 16px;
+
+  border-radius: 16px;
+}
+
+button {
+  background:
+    linear-gradient(
+      135deg,
+      #4f46e5,
+      #7c3aed);
+
+  border: none;
+
+  color: white;
+
+  padding: 18px;
+
+  border-radius: 18px;
+
+  font-size: 18px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
