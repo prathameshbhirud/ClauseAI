@@ -243,3 +243,300 @@ PDF Navigation
 
 ## Clickable Citation
 ![Clickable Citation](https://github.com/prathameshbhirud/ClauseAI/blob/main/images/Clickable_Citation.PNG)
+
+
+
+
+
+
+# Project Structure
+
+```text
+ClauseAI/
+│
+├── backend/
+│   ├── ClauseAI.Api/
+│   ├── ClauseAI.Application/
+│   ├── ClauseAI.Domain/
+│   └── ClauseAI.Infrastructure/
+│
+├── frontend-angular/
+│
+├── storage/
+│
+├── docker/
+│
+└── README.md
+```
+
+---
+
+# Prerequisites
+
+Before running ClauseAI locally, install the following:
+
+| Software       | Version         |
+| -------------- | --------------- |
+| Node.js        | 20+             |
+| Angular CLI    | Latest          |
+| .NET SDK       | .NET 10 Preview |
+| PostgreSQL     | 16+             |
+| Docker Desktop | Optional        |
+| Ollama         | Latest          |
+| Git            | Latest          |
+
+---
+
+# Required Ollama Models
+
+Install required models:
+
+```bash
+ollama pull phi3:mini
+ollama pull nomic-embed-text
+```
+
+Verify:
+
+```bash
+ollama list
+```
+
+Expected:
+
+```text
+phi3:mini
+nomic-embed-text
+```
+
+---
+
+# Install Tesseract OCR
+
+Required for scanned/image-based PDF support.
+
+Windows installer:
+
+https://github.com/UB-Mannheim/tesseract/wiki
+
+Verify installation:
+
+```bash
+tesseract --version
+```
+
+---
+
+# Local Setup Guide
+
+## Step 1 — Clone Repository
+
+```bash
+git clone https://github.com/prathameshbhirud/ClauseAI.git
+
+cd ClauseAI
+```
+
+---
+
+## Step 2 — Start PostgreSQL
+
+Ensure PostgreSQL is running locally.
+
+Create database:
+
+```sql
+CREATE DATABASE clauseai;
+```
+
+Enable pgvector:
+
+```sql
+CREATE EXTENSION vector;
+```
+
+---
+
+## Step 3 — Configure Backend
+
+Navigate to backend:
+
+```bash
+cd backend
+```
+
+Update:
+
+```text
+ClauseAI.Api/appsettings.json
+```
+
+Example:
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection":
+    "Host=localhost;Port=5432;Database=clauseai;Username=postgres;Password=yourpassword"
+}
+```
+
+---
+
+## Step 4 — Install Backend Dependencies
+
+```bash
+dotnet restore
+```
+
+---
+
+## Step 5 — Run EF Core Migrations
+
+From:
+
+```text
+ClauseAI/backend
+```
+
+Run:
+
+```bash
+dotnet ef database update \
+--project ClauseAI.Infrastructure \
+--startup-project ClauseAI.Api
+```
+
+---
+
+## Step 6 — Copy Tesseract Language Data
+
+Copy:
+
+```text
+eng.traineddata
+```
+
+into:
+
+```text
+backend/ClauseAI.Api/tessdata
+```
+
+Final structure:
+
+```text
+ClauseAI.Api/
+ └── tessdata/
+      └── eng.traineddata
+```
+
+---
+
+## Step 7 — Start Ollama
+
+Run:
+
+```bash
+ollama serve
+```
+
+Verify:
+
+```bash
+ollama list
+```
+
+---
+
+## Step 8 — Start Backend API
+
+From:
+
+```text
+ClauseAI/backend
+```
+
+Run:
+
+```bash
+dotnet run --project ClauseAI.Api
+```
+
+Swagger:
+
+```text
+http://localhost:5184/swagger
+```
+
+---
+
+## Step 9 — Start Angular Frontend
+
+Open NEW terminal.
+
+Navigate:
+
+```bash
+cd frontend-angular
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start Angular:
+
+```bash
+ng serve
+```
+
+Frontend URL:
+
+```text
+http://localhost:4200
+```
+
+---
+
+# Application Startup Order
+
+Start services in this sequence:
+
+1. PostgreSQL
+2. Ollama
+3. Backend API
+4. Angular Frontend
+
+---
+
+# First End-to-End Test
+
+## Upload Sample Insurance PDF
+
+1. Open frontend:
+
+   ```text
+   http://localhost:4200
+   ```
+
+2. Upload insurance policy PDF
+
+3. Wait for document processing
+
+4. Ask questions such as:
+
+```text
+What is the waiting period for cataract surgery?
+```
+
+```text
+What are maternity exclusions?
+```
+
+```text
+What is the room rent limit?
+```
+
+---
