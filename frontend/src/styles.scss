@@ -181,3 +181,41 @@ body {
 
   font-size: 20px;
 }
+
+.workspace {
+  display: flex;
+  gap: 24px;
+  height: 100%;
+}
+
+.chat-panel {
+  flex: 1;
+  min-width: 0;
+}
+
+.preview-panel {
+  width: 42%;
+  min-width: 500px;
+}
+
+.conversation-list {
+  margin-top: 36px;
+}
+
+.conversation-item {
+  padding: 14px 18px;
+
+  border-radius: 14px;
+
+  background: rgba(255,255,255,0.06);
+
+  margin-bottom: 10px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.conversation-item:hover {
+  background: rgba(255,255,255,0.12);
+}

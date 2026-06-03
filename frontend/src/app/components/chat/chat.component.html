@@ -25,13 +25,15 @@
 
           <div
             *ngFor="let citation of message.citations"
-            class="citation">
+            class="citation clickable" (click)="openCitation(citation.pageNumber)">
 
             <div class="citation-page">
 
               Page {{ citation.pageNumber }}
 
             </div>
+
+            
 
             <div class="citation-content">
 

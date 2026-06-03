@@ -66,6 +66,20 @@
 
     </div>
 
+    <div *ngIf="conversations.length" class="conversation-list">
+
+      <div class="section-label">
+        CONVERSATIONS
+      </div>
+
+      <div *ngFor="let conversation of conversations" class="conversation-item">
+
+        {{ conversation.title }}
+
+      </div>
+
+    </div>
+
   </aside>
 
   <!-- MAIN -->
@@ -83,23 +97,17 @@
 
     </header>
 
-    <div class="chat-page">
-
-      <app-chat
-        *ngIf="uploadedDocument && !processing"
-        [documentId]="uploadedDocument.id">
-      </app-chat>
-
-      <div
-        *ngIf="processing"
-        class="processing-state">
-
-        Processing document...
-
+    <div class="workspace">
+      <div class="chat-panel">
+        <app-chat
+          *ngIf="uploadedDocument && !processing"
+          [documentId]="uploadedDocument.id">
+        </app-chat>
       </div>
 
+      <div class="preview-panel">
+        <app-pdf-preview></app-pdf-preview>
+      </div>
     </div>
-
   </main>
-
 </div>

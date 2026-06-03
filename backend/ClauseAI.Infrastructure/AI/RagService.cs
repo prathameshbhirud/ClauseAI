@@ -1,3 +1,4 @@
+using ClauseAI.Application.DTOs;
 using ClauseAI.Application.Interfaces;
 using ClauseAI.Application.Models;
 
@@ -40,7 +41,7 @@ public class RagService : IRagService
         return new AskQuestionResponse
         {
             Answer = answer,
-            Citations = chunks.Select(x => new Citation
+            Citations = chunks.Select(x => new CitationDto
             {
                 PageNumber = x.PageNumber,
                 Content = x.Content

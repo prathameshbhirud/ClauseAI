@@ -137,3 +137,13 @@ button {
   font-size: 14px;
   color: #475569;
 }
+
+.clickable {
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.clickable:hover {
+  background: #ede9fe;
+  transform: translateY(-2px);
+}

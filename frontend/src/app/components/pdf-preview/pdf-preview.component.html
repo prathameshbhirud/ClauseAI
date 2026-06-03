@@ -1,0 +1,13 @@
+<div class="pdf-preview">
+
+  <ngx-extended-pdf-viewer
+    *ngIf="pdfUrl"
+    [src]="pdfUrl"
+    [page]="page"
+    [height]="'100%'"
+    [showToolbar]="true"
+    [showSidebarButton]="false"
+    [showFindButton]="true">
+  </ngx-extended-pdf-viewer>
+
+</div>

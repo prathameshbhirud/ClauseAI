@@ -1,5 +1,6 @@
 using ClauseAI.Application.Interfaces;
 using ClauseAI.Application.Models;
+using ClauseAI.Application.DTOs;
 using ClauseAI.Domain.Entities;
 using ClauseAI.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
@@ -208,17 +209,78 @@ public class DocumentsController : ControllerBase
     }
 
     [HttpPost("{documentId:guid}/ask")]
-    public async Task<IActionResult> Ask(
-        Guid documentId,
-        [FromBody] AskQuestionRequest request)
+    public async Task<ActionResult<AskQuestionResponse>>
+        Ask(Guid documentId, [FromBody] AskQuestionRequest request)
     {
-        var response =
-            await _ragService.AskAsync(
+        // Retrieve relevant chunks
+        var chunks = await _vectorSearchService.SearchAsync(
                 documentId,
                 request.Question,
                 request.TopK);
 
-        return Ok(response);
+        // Build context
+        var context = string.Join(
+            "\n\n",
+            chunks.Select(x =>
+                $"[Page {x.PageNumber}]\n{x.Content}"));
+
+        // Generate answer
+        var answer = await _chatCompletionService.AskAsync(request.Question, context);
+
+        // Create conversation
+        var conversation = new Conversation
+            {
+                Id = Guid.NewGuid(),
+                DocumentId = documentId,
+                Title = request.Question.Length > 80
+                        ? request.Question.Substring(0, 80)
+                        : request.Question,
+                CreatedAt = DateTime.UtcNow
+            };
+
+        _dbContext.Conversations.Add(conversation);
+
+        // Save user message
+        _dbContext.ConversationMessages.Add(
+            new ConversationMessage
+            {
+                Id = Guid.NewGuid(),
+                ConversationId = conversation.Id,
+                Role = "user",
+                Content = request.Question,
+                CreatedAt = DateTime.UtcNow
+            });
+
+        // Save assistant message
+        _dbContext.ConversationMessages.Add(
+            new ConversationMessage
+            {
+                Id = Guid.NewGuid(),
+                ConversationId = conversation.Id,
+                Role = "assistant",
+                Content = answer,
+                CreatedAt = DateTime.UtcNow
+            });
+
+        await _dbContext.SaveChangesAsync();
+
+        // Return response
+        return Ok(new AskQuestionResponse
+        {
+            Answer = answer,
+
+            Citations = chunks
+                .Select(x => new CitationDto
+                {
+                    PageNumber = x.PageNumber,
+
+                    Content =
+                        x.Content.Length > 300
+                            ? x.Content.Substring(0, 300) + "..."
+                            : x.Content
+                })
+                .ToList()
+        });
     }
 
     [HttpGet("{documentId:guid}/status")]
@@ -268,5 +330,20 @@ public class DocumentsController : ControllerBase
 
             await Response.Body.FlushAsync();
         }
+    }
+
+    [HttpGet("{documentId:guid}/file")]
+    public async Task<IActionResult> GetFile(Guid documentId)
+    {
+        var document = await _dbContext.Documents.FirstOrDefaultAsync(x => x.Id == documentId);
+
+        if (document == null)
+        {
+            return NotFound();
+        }
+
+        var stream = System.IO.File.OpenRead(document.FilePath);
+
+        return File(stream, "application/pdf");
     }
 }

@@ -7,6 +7,7 @@ import { ElementRef, ViewChild } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { AskResponse } from '../../models/ask-response.model';
 import { ChatMessage } from '../../models/chat-message.model';
+import { PdfStateService } from '../../services/pdf-state.service';
 
 @Component({
   selector: 'app-chat',
@@ -32,7 +33,8 @@ export class ChatComponent {
 
   constructor(
     private apiService: ApiService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private pdfState: PdfStateService
 ) {}
 
   ask() {
@@ -112,5 +114,9 @@ export class ChatComponent {
       }
 
     });
+  }
+
+  openCitation(page: number) {
+    this.pdfState.selectedPage.next(page);
   }
 }
